@@ -6,6 +6,7 @@ import { mouseLeft } from "./commands/mouseLeft";
 import { mouseRight } from "./commands/mouseRight";
 import { mousePosition } from "./commands/mousePosition";
 import { drawCircle } from "./commands/drawCircle";
+import { Button, down, left, mouse, right, up } from "@nut-tree/nut-js";
 
 export const controller = async(ws: WebSocket) => {
   const readline = createWebSocketStream(ws, { encoding: 'utf8', decodeStrings: false });
@@ -58,6 +59,18 @@ export const controller = async(ws: WebSocket) => {
           break;
         }
 
+        case 'draw_square': {
+          await mouse.pressButton(Button.LEFT);
+          await mouse.move(right(+args));
+          await mouse.move(down(+args));
+          await mouse.move(left(+args));
+          await mouse.move(up(+args));
+          await mouse.releaseButton(Button.LEFT);
+          readline.write('draw_square');
+          console.log(`${color.yellow}${command}${color.white} resulted as draw square with side ${args}px;`);
+          break;
+        }
+
         default:
           break;
       }
@@ -65,5 +78,9 @@ export const controller = async(ws: WebSocket) => {
       throw new Error(`${color.red} Command error${color.white}`);
     }
   })
+}
+
+function drawSquare(args: any) {
+  throw new Error("Function not implemented.");
 }
 
