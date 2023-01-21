@@ -5,6 +5,7 @@ import { mouseDown } from "./commands/mouseDown";
 import { mouseLeft } from "./commands/mouseLeft";
 import { mouseRight } from "./commands/mouseRight";
 import { mousePosition } from "./commands/mousePosition";
+import { drawCircle } from "./commands/drawCircle";
 
 export const controller = async(ws: WebSocket) => {
   const readline = createWebSocketStream(ws, { encoding: 'utf8', decodeStrings: false });
@@ -46,7 +47,14 @@ export const controller = async(ws: WebSocket) => {
         case 'mouse_position': {
           const {x, y} = await mousePosition();
           readline.write(`${command} ${x},${y}`);
-          console.log(`${color.yellow}${command}${color.white} resulted as cursor at ${x}x ${y}y;`);
+          console.log(`${color.yellow}${command}${color.white} resulted as cursor at ${x}px ${y}px;`);
+          break;
+        }
+
+        case 'draw_circle': {
+          await drawCircle(args);
+          readline.write('draw_circle');
+          console.log(`${color.yellow}${command}${color.white} resulted as draw circle with radius ${args}px;`);
           break;
         }
 
