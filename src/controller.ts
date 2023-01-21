@@ -6,7 +6,8 @@ import { mouseLeft } from "./commands/mouseLeft";
 import { mouseRight } from "./commands/mouseRight";
 import { mousePosition } from "./commands/mousePosition";
 import { drawCircle } from "./commands/drawCircle";
-import { Button, down, left, mouse, right, up } from "@nut-tree/nut-js";
+import { drawSquare } from "./commands/drawSquare";
+import { drawRectangle } from "./commands/drawRectangle";
 
 export const controller = async(ws: WebSocket) => {
   const readline = createWebSocketStream(ws, { encoding: 'utf8', decodeStrings: false });
@@ -15,6 +16,8 @@ export const controller = async(ws: WebSocket) => {
     try {
       const command = data.split(' ').shift();
       const args = data.split(' ').slice(1).join('');
+      const argOne = data.split(' ').slice(1,2);
+      const argTwo = data.split(' ').slice(2);
 
       switch (command) {
         case 'mouse_up': {
@@ -60,14 +63,16 @@ export const controller = async(ws: WebSocket) => {
         }
 
         case 'draw_square': {
-          await mouse.pressButton(Button.LEFT);
-          await mouse.move(right(+args));
-          await mouse.move(down(+args));
-          await mouse.move(left(+args));
-          await mouse.move(up(+args));
-          await mouse.releaseButton(Button.LEFT);
+          await drawSquare(args);
           readline.write('draw_square');
           console.log(`${color.yellow}${command}${color.white} resulted as draw square with side ${args}px;`);
+          break;
+        }
+
+        case 'draw_rectangle': {
+          await drawRectangle(argOne, argTwo)
+          readline.write('draw_rectangle');
+          console.log(`${color.yellow}${command}${color.white} resulted as draw rectangle ${argOne}X${argTwo};`);
           break;
         }
 
@@ -80,7 +85,4 @@ export const controller = async(ws: WebSocket) => {
   })
 }
 
-function drawSquare(args: any) {
-  throw new Error("Function not implemented.");
-}
 
