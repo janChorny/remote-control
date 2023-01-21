@@ -4,6 +4,7 @@ import { mouseUp } from "./commands/mouseUp";
 import { mouseDown } from "./commands/mouseDown";
 import { mouseLeft } from "./commands/mouseLeft";
 import { mouseRight } from "./commands/mouseRight";
+import { mousePosition } from "./commands/mousePosition";
 
 export const controller = async(ws: WebSocket) => {
   const readline = createWebSocketStream(ws, { encoding: 'utf8', decodeStrings: false });
@@ -39,6 +40,13 @@ export const controller = async(ws: WebSocket) => {
           await mouseRight(args);
           readline.write('mouse_right');
           console.log(`${color.yellow}${command}${color.white} resulted as move right ${args}px;`);
+          break;
+        }
+
+        case 'mouse_position': {
+          const {x, y} = await mousePosition();
+          readline.write(`${command} ${x},${y}`);
+          console.log(`${color.yellow}${command}${color.white} resulted as cursor at ${x}x ${y}y;`);
           break;
         }
 
