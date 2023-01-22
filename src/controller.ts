@@ -78,8 +78,8 @@ export const controller = async(ws: WebSocket) => {
         }
 
         case 'prnt_scrn': {
-          await printScreen();
-          readline.write('prnt_scrn');
+          const result = await printScreen();
+          readline.write(`${command} ${result}`);
           console.log(`${color.yellow}${command}${color.white} resulted as a screenshot;`);
           break;
         }
