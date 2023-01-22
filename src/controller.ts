@@ -8,6 +8,7 @@ import { mousePosition } from "./commands/mousePosition";
 import { drawCircle } from "./commands/drawCircle";
 import { drawSquare } from "./commands/drawSquare";
 import { drawRectangle } from "./commands/drawRectangle";
+import { printScreen } from "./commands/printScreen";
 
 export const controller = async(ws: WebSocket) => {
   const readline = createWebSocketStream(ws, { encoding: 'utf8', decodeStrings: false });
@@ -73,6 +74,13 @@ export const controller = async(ws: WebSocket) => {
           await drawRectangle(argOne, argTwo)
           readline.write('draw_rectangle');
           console.log(`${color.yellow}${command}${color.white} resulted as draw rectangle ${argOne}X${argTwo};`);
+          break;
+        }
+
+        case 'prnt_scrn': {
+          await printScreen();
+          readline.write('prnt_scrn');
+          console.log(`${color.yellow}${command}${color.white} resulted as screenshot at prscreen folder;`);
           break;
         }
 
