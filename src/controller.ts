@@ -52,7 +52,7 @@ export const controller = async(ws: WebSocket) => {
         case 'mouse_position': {
           const {x, y} = await mousePosition();
           readline.write(`${command} ${x},${y}`);
-          console.log(`${color.yellow}${command}${color.white} resulted as cursor at ${x}px ${y}px;`);
+          console.log(`${color.yellow}${command}${color.white} resulted as cursor at ${x}px(X) ${y}px(Y);`);
           break;
         }
 
@@ -80,7 +80,7 @@ export const controller = async(ws: WebSocket) => {
         case 'prnt_scrn': {
           await printScreen();
           readline.write('prnt_scrn');
-          console.log(`${color.yellow}${command}${color.white} resulted as screenshot at prscreen folder;`);
+          console.log(`${color.yellow}${command}${color.white} resulted as a screenshot;`);
           break;
         }
 

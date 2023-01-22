@@ -2,6 +2,7 @@ import { FileType, mouse, Region, screen } from "@nut-tree/nut-js";
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readFile } from 'node:fs/promises';
+import Jimp from 'jimp/es';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -10,8 +11,12 @@ const filePath = join(__dirname,'..', 'prtscreen');
 export const printScreen = async () => {
   const { x, y } = await mouse.getPosition();
   const region = new Region(x-100,y-100,200,200);
-  const screenShot = await screen.captureRegion('screenshot', region, FileType.PNG, filePath)
-  const result = await readFile(screenShot);
+  const grabbedRegion = (await screen.grabRegion(region)).toRGB();
+  // const screenShot = await screen.captureRegion('screenshot', region, FileType.PNG, filePath)
+  // const result = await readFile(screenShot);
+  // return result.toString('base64');
+  const image = new Jimp({ data: (await grabbedRegion).data, width: (await grabbedRegion).width, height: (await grabbedRegion).height })
+  const result = await image.getBufferAsync(Jimp.MIME_PNG);
   return result.toString('base64');
 };
 
